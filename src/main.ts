@@ -32,3 +32,31 @@ export async function greeter(name: any) {
   // The name parameter should be of type string. Any is used only to trigger the rule.
   return await delayedHello(name, Delays.Long);
 }
+
+import app from './app';
+import { initDb } from './database/db';
+import { seedDatabase } from './database/factory';
+
+const PORT = process.env.PORT || 3000;
+
+const startServer = async () => {
+  try {
+    // Initialize database tables
+    await initDb();
+    console.log('Database initialized successfully');
+
+    // Seed database with initial data
+    await seedDatabase();
+    console.log('Database seeded successfully');
+
+    // Start the server
+    app.listen(PORT, () => {
+      console.log(`Server is running on http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+};
+
+startServer();
