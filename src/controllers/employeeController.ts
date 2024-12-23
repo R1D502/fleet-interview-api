@@ -21,7 +21,7 @@ export const getEmployeeById = async (req: Request, res: Response): Promise<void
     );
     
     if (!employee) {
-      return res.status(404).json({ error: 'Employee not found' });
+      res.status(404).json({ error: 'Employee not found' });
     }
     
     res.json(employee);
@@ -36,7 +36,7 @@ export const createEmployee = async (req: Request, res: Response): Promise<void>
     const { name, role } = req.body as Employee;
     
     if (!name || !role) {
-      return res.status(400).json({ error: 'Name and role are required' });
+      res.status(400).json({ error: 'Name and role are required' });
     }
 
     const result = await dbRun<[string, string]>(
@@ -61,7 +61,7 @@ export const updateEmployee = async (req: Request, res: Response): Promise<void>
     const { name, role } = req.body as Employee;
 
     if (!name || !role) {
-      return res.status(400).json({ error: 'Name and role are required' });
+      res.status(400).json({ error: 'Name and role are required' });
     }
 
     const employee = await dbGet<[string], EmployeeRow>(
@@ -70,7 +70,7 @@ export const updateEmployee = async (req: Request, res: Response): Promise<void>
     );
 
     if (!employee) {
-      return res.status(404).json({ error: 'Employee not found' });
+      res.status(404).json({ error: 'Employee not found' });
     }
 
     await dbRun<[string, string, string]>(
@@ -94,7 +94,7 @@ export const deleteEmployee = async (req: Request, res: Response): Promise<void>
     );
 
     if (!employee) {
-      return res.status(404).json({ error: 'Employee not found' });
+      res.status(404).json({ error: 'Employee not found' });
     }
 
     await dbRun<[string]>('DELETE FROM employees WHERE id = ?', [id]);

@@ -1,42 +1,40 @@
 import express from 'express';
 import cors from 'cors';
 import { initDb } from './database/db';
-import * as employeeController from './controllers/employeeController';
-import * as deviceController from './controllers/deviceController';
+import { seedDatabase } from './database/factory';
+import routes from './routes';
 
 const app = express();
-const port = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-// Employee routes
-app.get('/employees', employeeController.getAllEmployees);
-app.get('/employees/:id', employeeController.getEmployeeById);
-app.post('/employees', employeeController.createEmployee);
-app.put('/employees/:id', employeeController.updateEmployee);
-app.delete('/employees/:id', employeeController.deleteEmployee);
-
-// Device routes
-app.get('/devices', deviceController.getAllDevices);
-app.get('/devices/:id', deviceController.getDeviceById);
-app.post('/devices', deviceController.createDevice);
-app.put('/devices/:id', deviceController.updateDevice);
-app.delete('/devices/:id', deviceController.deleteDevice);
+// Mount all routes
+app.use('/api', routes);
 
 // Error handling middleware
-app.use((err: Error, req: express.Request, res: express.Response) => {
+app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Something went wrong!' });
 });
 
+const PORT = process.env.PORT || 3000;
+
 // Start server
 const startServer = async () => {
   try {
+    // Initialize database tables
     await initDb();
-    app.listen(port, () => {
-      console.log(`Server running on port ${port}`);
+    console.log('Database initialized successfully');
+
+    // Seed database with initial data
+    await seedDatabase();
+    console.log('Database seeded successfully');
+
+    // Start the server
+    app.listen(PORT, () => {
+      console.log(`Server is running on http://localhost:${PORT}`);
     });
   } catch (error) {
     console.error('Failed to start server:', error);
@@ -45,3 +43,5 @@ const startServer = async () => {
 };
 
 startServer();
+
+export default app;

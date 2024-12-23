@@ -1,4 +1,5 @@
 import sqlite3 from 'sqlite3';
+import { EmployeeRow, DeviceRow } from '../entities/types';
 
 interface DbResult {
   lastID: number;
@@ -62,6 +63,36 @@ export const dbGet = async <T extends SqlParameter[], R = Record<string, unknown
   params: T = [] as unknown as T
 ): Promise<R | undefined> => {
   return getAsync(sql, params) as Promise<R | undefined>;
+};
+
+// Database visualization functions
+export const viewEmployees = async (): Promise<void> => {
+  try {
+    const employees = await dbAll<[], EmployeeRow>('SELECT * FROM employees');
+    console.log('\n=== Employees ===');
+    console.table(employees);
+  } catch (error) {
+    console.error('Error viewing employees:', error);
+  }
+};
+
+export const viewDevices = async (): Promise<void> => {
+  try {
+    const devices = await dbAll<[], DeviceRow & { owner_name?: string }>(`
+      SELECT d.*, e.name as owner_name 
+      FROM devices d 
+      LEFT JOIN employees e ON d.owner_id = e.id
+    `);
+    console.log('\n=== Devices ===');
+    console.table(devices);
+  } catch (error) {
+    console.error('Error viewing devices:', error);
+  }
+};
+
+export const viewDatabase = async (): Promise<void> => {
+  await viewEmployees();
+  await viewDevices();
 };
 
 // Initialize database tables

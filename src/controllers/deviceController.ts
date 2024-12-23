@@ -36,7 +36,7 @@ export const createDevice = async (req: Request, res: Response): Promise<void> =
     const { device_name, type, owner_id } = req.body as Device;
     
     if (!device_name || !type) {
-      res.status(400).json({ error: 'Device name and type are required' });
+       res.status(400).json({ error: 'Device name and type are required' });
     }
 
     if (owner_id) {
@@ -45,7 +45,7 @@ export const createDevice = async (req: Request, res: Response): Promise<void> =
         [owner_id]
       );
       if (!owner) {
-        res.status(400).json({ error: 'Invalid owner_id' });
+         res.status(400).json({ error: 'Invalid owner_id' });
       }
     }
 
@@ -72,7 +72,7 @@ export const updateDevice = async (req: Request, res: Response): Promise<void> =
     const { device_name, type, owner_id } = req.body as Device;
 
     if (!device_name || !type) {
-      res.status(400).json({ error: 'Device name and type are required' });
+       res.status(400).json({ error: 'Device name and type are required' });
     }
 
     const device = await dbGet<[string], DeviceRow>(
@@ -81,7 +81,7 @@ export const updateDevice = async (req: Request, res: Response): Promise<void> =
     );
 
     if (!device) {
-      res.status(404).json({ error: 'Device not found' });
+       res.status(404).json({ error: 'Device not found' });
     }
 
     if (owner_id) {
@@ -90,7 +90,7 @@ export const updateDevice = async (req: Request, res: Response): Promise<void> =
         [owner_id]
       );
       if (!owner) {
-        res.status(400).json({ error: 'Invalid owner_id' });
+         res.status(400).json({ error: 'Invalid owner_id' });
       }
     }
 
@@ -120,7 +120,7 @@ export const deleteDevice = async (req: Request, res: Response): Promise<void> =
     );
 
     if (!device) {
-      res.status(404).json({ error: 'Device not found' });
+       res.status(404).json({ error: 'Device not found' });
     }
 
     await dbRun<[string]>('DELETE FROM devices WHERE id = ?', [id]);

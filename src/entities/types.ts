@@ -1,15 +1,18 @@
+export type DeviceType = 'Laptop' | 'Display' | 'Peripheral';
+export type EmployeeRole = 'Developer' | 'Designer' | 'Manager' | 'Product Owner';
+
 // Base interfaces for request/response
 export interface Employee {
   id?: number;
   name: string;
-  role: string;
+  role: EmployeeRole;
   created_at?: string;
 }
 
 export interface Device {
   id?: number;
   device_name: string;
-  type: string;
+  type: DeviceType;
   owner_id?: number | null;
   created_at?: string;
 }

@@ -1,14 +1,14 @@
-import { dbRun } from './db';
+import { dbRun, viewDatabase } from './db';
 import { Employee, Device } from '../entities/types';
 
 const employees: Employee[] = [
   {
     name: 'John Doe',
-    role: 'Software Engineer'
+    role: 'Developer'
   },
   {
     name: 'Jane Smith',
-    role: 'Product Manager'
+    role: 'Designer'
   }
 ];
 
@@ -20,7 +20,7 @@ const devices: (Omit<Device, 'id'> & { owner_name: string })[] = [
   },
   {
     device_name: 'iPhone 13 Pro',
-    type: 'Mobile',
+    type: 'Display',
     owner_name: 'Jane Smith'
   }
 ];
@@ -42,7 +42,7 @@ export const seedDatabase = async (): Promise<void> => {
     const employeeMap = new Map<string, number>();
     
     for (const employee of employees) {
-      const result = await dbRun<[string], { id: number }>(
+      const result = await dbRun<[string]>(
         'SELECT id FROM employees WHERE name = ?',
         [employee.name]
       );
@@ -64,6 +64,9 @@ export const seedDatabase = async (): Promise<void> => {
     }
 
     console.log('Database seeding completed successfully');
+    
+    // Display the current state of the database
+    await viewDatabase();
   } catch (error) {
     console.error('Error seeding database:', error);
     throw error;
