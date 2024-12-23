@@ -1,121 +1,117 @@
-# node-typescript-boilerplate
+# Fleet Management API
 
-[![Sponsor][sponsor-badge]][sponsor]
-[![TypeScript version][ts-badge]][typescript-5-5]
-[![Node.js version][nodejs-badge]][nodejs]
-[![APLv2][license-badge]][license]
-[![Build Status - GitHub Actions][gha-badge]][gha-ci]
+A TypeScript-based REST API for managing company devices and employees. Built with Express and SQLite for simplicity and ease of use.
 
-👩🏻‍💻 Developer Ready: A comprehensive template. Works out of the box for most [Node.js][nodejs] projects.
+## Features
 
-🏃🏽 Instant Value: All basic tools included and configured:
-
-- [TypeScript][typescript] [5.5][typescript-5-5]
-- [ESM][esm]
-- [ESLint][eslint] with some initial rules recommendation
-- [Vitest][vitest] for fast unit testing and code coverage
-- Type definitions for Node.js
-- [Prettier][prettier] to enforce consistent code style
-- NPM [scripts](#available-scripts) for common operations
-- [EditorConfig][editorconfig] for consistent coding style
-- Reproducible environments thanks to [Volta][volta]
-- Example configuration for [GitHub Actions][gh-actions]
-- Simple example of TypeScript code and unit test
-
-🤲 Free as in speech: available under the APLv2 license.
+- CRUD operations for Employees and Devices
+- SQLite database with typed operations
+- Express.js with TypeScript
+- Modular architecture with clear separation of concerns
+- Automatic database seeding with sample data
 
 ## Getting Started
 
-This project is intended to be used with the latest Active LTS release of [Node.js][nodejs].
+### Prerequisites
 
-### Use as a repository template
+- Node.js (>= 20.9)
+- npm or yarn
 
-To start, just click the **[Use template][repo-template-action]** link (or the green button). Start adding your code in the `src` and unit tests in the `__tests__` directories.
+### Installation
 
-### Clone repository
+1. Clone the repository:
+```bash
+git clone git@github.com:R1D502/fleet-interview-api.git
+cd fleet-interview-api
+```
 
-To clone the repository, use the following commands:
-
-```sh
-git clone https://github.com/jsynowiec/node-typescript-boilerplate
-cd node-typescript-boilerplate
+2. Install dependencies:
+```bash
 npm install
 ```
 
-### Download latest release
-
-Download and unzip the current **main** branch or one of the tags:
-
-```sh
-wget https://github.com/jsynowiec/node-typescript-boilerplate/archive/main.zip -O node-typescript-boilerplate.zip
-unzip node-typescript-boilerplate.zip && rm node-typescript-boilerplate.zip
+3. Start the development server:
+```bash
+npm run dev
 ```
 
-## Available Scripts
+The server will start at `http://localhost:3000`.
 
-- `clean` - remove coverage data, cache and transpiled files,
-- `prebuild` - lint source files and tests before building,
-- `build` - transpile TypeScript to ES6,
-- `build:watch` - interactive watch mode to automatically transpile source files,
-- `lint` - lint source files and tests,
-- `prettier` - reformat files,
-- `test` - run tests,
-- `test:watch` - interactive watch mode to automatically re-run tests
-- `test:coverage` - run test and print out test coverage
+## API Endpoints
 
-## Additional Information
+All endpoints are prefixed with `/api`.
 
-### Why include Volta
+### Employees
 
-I recommend to [install][volta-getting-started] Volta and use it to manage your project's toolchain.
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/employees` | Get all employees |
+| GET | `/api/employees/:id` | Get employee by ID |
+| POST | `/api/employees` | Create new employee |
+| PUT | `/api/employees/:id` | Update employee |
+| DELETE | `/api/employees/:id` | Delete employee |
 
-[Volta][volta]’s toolchain always keeps track of where you are, it makes sure the tools you use always respect the settings of the project you’re working on. This means you don’t have to worry about changing the state of your installed software when switching between projects. For example, it's [used by engineers at LinkedIn][volta-tomdale] to standardize tools and have reproducible development environments.
+#### Employee Object Structure
+```typescript
+{
+  id?: number;
+  name: string;
+  role: "Developer" | "Designer" | "Manager" | "Product Owner";
+  created_at?: string;
+}
+```
 
-### Why Vitest instead of Jest
+### Devices
 
-I recommend using [Vitest][vitest] for unit and integration testing of your TypeScript code.
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/devices` | Get all devices |
+| GET | `/api/devices/:id` | Get device by ID |
+| POST | `/api/devices` | Create new device |
+| PUT | `/api/devices/:id` | Update device |
+| DELETE | `/api/devices/:id` | Delete device |
 
-In 2023, my team and I gradually switched from Jest to [Vitest][vitest] in all the projects. We've found out that generally, Vitest is faster than Jest, especially for large test suits. Furthermore, Vitest has native support for ES modules, is easier to configure, and has a much nicer developer experience when used with TypeScript. For example, when working with mocks, spies and types.
+#### Device Object Structure
+```typescript
+{
+  id?: number;
+  device_name: string;
+  type: "Laptop" | "Display" | "Peripheral";
+  owner_id?: number;
+  created_at?: string;
+}
+```
 
-Nevertheless, the choice of specific tooling always depends on the specific requirements and characteristics of the project.
+## Development
 
-### ES Modules
+### Project Structure
 
-This template uses native [ESM][esm]. Make sure to read [this][nodejs-esm], and [this][ts47-esm] first.
+```
+src/
+├── controllers/     # Request handlers
+├── database/       # Database configuration and operations
+├── entities/       # TypeScript interfaces and types
+└── routes/         # API route definitions
+```
 
-If your project requires CommonJS, you will have to [convert to ESM][sindresorhus-esm].
+### Available Scripts
 
-Please do not open issues for questions regarding CommonJS or ESM on this repo.
+- `npm run dev` - Start development server with hot reload
+- `npm run build` - Build for production
+- `npm start` - Start production server
+- `npm run lint` - Run ESLint
+- `npm run test` - Run tests
 
-## Backers & Sponsors
+### Database
 
-Support this project by becoming a [sponsor][sponsor].
+The API uses SQLite with an in-memory database that is seeded with sample data on startup. The database includes:
+- Two sample employees (Developer and Designer)
+- Two sample devices (Laptop and Display)
 
 ## License
 
-Licensed under the APLv2. See the [LICENSE](https://github.com/jsynowiec/node-typescript-boilerplate/blob/main/LICENSE) file for details.
+This project is licensed under the APLv2 License - see the [LICENSE](LICENSE) file for details.
 
-[ts-badge]: https://img.shields.io/badge/TypeScript-5.5-blue.svg
-[nodejs-badge]: https://img.shields.io/badge/Node.js->=%2020.9-blue.svg
-[nodejs]: https://nodejs.org/dist/latest-v20.x/docs/api/
-[gha-badge]: https://github.com/jsynowiec/node-typescript-boilerplate/actions/workflows/nodejs.yml/badge.svg
-[gha-ci]: https://github.com/jsynowiec/node-typescript-boilerplate/actions/workflows/nodejs.yml
-[typescript]: https://www.typescriptlang.org/
-[typescript-5-5]: https://devblogs.microsoft.com/typescript/announcing-typescript-5-5/
-[license-badge]: https://img.shields.io/badge/license-APLv2-blue.svg
-[license]: https://github.com/jsynowiec/node-typescript-boilerplate/blob/main/LICENSE
-[sponsor-badge]: https://img.shields.io/badge/♥-Sponsor-fc0fb5.svg
-[sponsor]: https://github.com/sponsors/jsynowiec
-[eslint]: https://github.com/eslint/eslint
-[prettier]: https://prettier.io
-[volta]: https://volta.sh
-[volta-getting-started]: https://docs.volta.sh/guide/getting-started
-[volta-tomdale]: https://twitter.com/tomdale/status/1162017336699838467
-[gh-actions]: https://github.com/features/actions
-[repo-template-action]: https://github.com/jsynowiec/node-typescript-boilerplate/generate
-[esm]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules
-[sindresorhus-esm]: https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c
-[nodejs-esm]: https://nodejs.org/docs/latest-v16.x/api/esm.html
-[ts47-esm]: https://devblogs.microsoft.com/typescript/announcing-typescript-4-7/#esm-nodejs
-[editorconfig]: https://editorconfig.org
-[vitest]: https://vitest.dev
+## Acknowledgments
+
+This project was bootstrapped with [node-typescript-boilerplate](https://github.com/jsynowiec/node-typescript-boilerplate).
